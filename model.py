@@ -1,4 +1,4 @@
-import csv 
+import sqlite3
 import record as rd
 
 # way to input diff categories

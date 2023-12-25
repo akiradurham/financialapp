@@ -8,15 +8,18 @@ class Finance(QWidget):
     def __init__(self):
         super().__init__()
 
+        global label
+        label = QLabel('Label', self)
+
         self.a_button = QPushButton('Add a Record', self)
-        self.a_button.setGeometry(130, 70, 130, 50)
+        self.a_button.setGeometry(1080, 550, 150, 50)
         font = self.a_button.font()
         font.setPointSize(11)
         self.a_button.setFont(font)
         self.a_button.clicked.connect(self.add)
 
         self.d_button = QPushButton('Delete a Record', self)
-        self.d_button.setGeometry(250, 70, 150, 50)
+        self.d_button.setGeometry(1080, 620, 150, 50)
         font = self.d_button.font()
         font.setPointSize(11)
         self.d_button.setFont(font)
@@ -31,9 +34,11 @@ class Finance(QWidget):
 
     def add(self):
         m.add()
+        label.setText('added record')
 
     def delete(self):
         m.delete()
+        label.setText('deleted record')
 
 
 process = 'financial.app.allowing.taskbar.customization'
