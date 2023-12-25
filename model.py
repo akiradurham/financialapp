@@ -4,6 +4,7 @@ import record as rd
 from contextlib import closing
 
 # way to input diff categories
+
 # way to visualize
 # way to track server job
 # create $ per hour
