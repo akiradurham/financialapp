@@ -7,7 +7,7 @@ class Records:
         self.name = name
         self.category = category
         self.price = price
-        self.dt = dt.datetime.now()
+        self.dt = dt.datetime.now().strftime('%Y-%m-%d')
 
     def __repr__(self):
-        return f"{self.name} is a {self.category}: ${self.price}\n"
+        return f'{self.name} is a {self.category}: ${self.price}\n'
