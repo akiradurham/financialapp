@@ -1,6 +1,3 @@
-from tkinter import *
-import model
+from PyQt5 import QApplication, QLabel
+import model as m
 
-main = Tk()
-
-main.mainloop()
