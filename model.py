@@ -1,8 +1,6 @@
 import csv 
 import record as rd
 
-
-
 # way to input diff categories
 # way to visualize
 # way to track server job
