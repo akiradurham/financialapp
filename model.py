@@ -1,6 +1,5 @@
 import sqlite3
 import re
-import record as rd
 from contextlib import closing
 
 # way to input diff categories
@@ -39,17 +38,14 @@ def database_handling(adding, record):
         raise NameError()
 
 
-def add(name, category, price):
-    record = rd.Records(name, category, price)
-    if price_validity(price) and database_handling(True, record):
-        return True
-    else:
+def add(record):
+    if (record.name or record.category or record.price or record.time) == '':
         return False
+    return price_validity(record.price) and database_handling(True, record)
 
 
-def delete(name, category, price):
+def delete(record):
     try:
-        record = rd.Records(name, category, price)
         database_handling(False, record)
         return True
     except NameError as e:
@@ -58,7 +54,4 @@ def delete(name, category, price):
 
 def price_validity(p):
     regex = r'^\d{1,3}(?:,?\d{3})*(?:\.\d{2})?$'
-    if re.match(regex, p):
-        return True
-    else:
-        return False
+    return re.match(regex, p)

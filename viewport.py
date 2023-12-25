@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import model as m
+import record as rd
 import ctypes
 
 
@@ -27,6 +28,9 @@ class Finance(QWidget):
         self.pricebox = QLineEdit('Enter price value', self)
         self.pricebox.setFont(font)
 
+        self.datebox = QLineEdit('Full Month, Day, Year', self)
+        self.datebox.setFont(font)
+
         self.a_button = QPushButton('Add a Record', self)
         self.a_button.setFont(font)
         self.a_button.clicked.connect(self.add)
@@ -39,6 +43,7 @@ class Finance(QWidget):
         self.rightbox.addWidget(self.namebox)
         self.rightbox.addLayout(self.hbox)
         self.rightbox.addWidget(self.pricebox)
+        self.rightbox.addWidget(self.datebox)
         self.rightbox.addWidget(self.label)
         self.rightbox.addWidget(self.a_button)
         self.rightbox.addWidget(self.d_button)
@@ -60,16 +65,46 @@ class Finance(QWidget):
         self.move(325, 150)
 
     def add(self):
-
-#        m.add()
-        self.label.setStyleSheet('color: green;')
-        self.label.setText('Successful')
+        if self.category1.isChecked():
+            record = rd.Records(self.namebox.text(), 'Revenue', self.pricebox.text(), self.datebox.text())
+            if m.add(record):
+                self.label.setStyleSheet('color: green;')
+                self.label.setText('Successful')
+            else:
+                self.label.setStyleSheet('color: red;')
+                self.label.setText('Unsuccessful')
+        elif self.category2.isChecked():
+            record = rd.Records(self.namebox.text(), 'Expense', self.pricebox.text(), self.datebox.text())
+            if m.add(record):
+                self.label.setStyleSheet('color: green;')
+                self.label.setText('Successful')
+            else:
+                self.label.setStyleSheet('color: red;')
+                self.label.setText('Unsuccessful')
+        else:
+            self.label.setStyleSheet('color: red;')
+            self.label.setText('Unsuccessful')
 
     def delete(self):
-
-#        m.delete()
-        self.label.setStyleSheet('color: green;')
-        self.label.setText('Successful')
+        if self.category1.isChecked():
+            record = rd.Records(self.namebox.text(), 'Revenue', self.pricebox.text(), self.datebox.text())
+            if m.delete(record):
+                self.label.setStyleSheet('color: green;')
+                self.label.setText('Successful')
+            else:
+                self.label.setStyleSheet('color: red;')
+                self.label.setText('Unsuccessful')
+        elif self.category2.isChecked():
+            record = rd.Records(self.namebox.text(), 'Expense', self.pricebox.text(), self.datebox.text())
+            if m.delete(record):
+                self.label.setStyleSheet('color: green;')
+                self.label.setText('Successful')
+            else:
+                self.label.setStyleSheet('color: red;')
+                self.label.setText('Unsuccessful')
+        else:
+            self.label.setStyleSheet('color: red;')
+            self.label.setText('Unsuccessful')
 
 
 process = 'financial.app.allowing.taskbar.customization'
