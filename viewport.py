@@ -1,29 +1,46 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import *
 import model as m
 import ctypes
 
 
-def addRecord():
+class Finance(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.a_button = QPushButton('Add a Record', self)
+        self.a_button.setGeometry(130, 70, 130, 50)
+        font = self.a_button.font()
+        font.setPointSize(11)
+        self.a_button.setFont(font)
+        self.a_button.clicked.connect(self.add)
+
+        self.d_button = QPushButton('Delete a Record', self)
+        self.d_button.setGeometry(250, 70, 150, 50)
+        font = self.d_button.font()
+        font.setPointSize(11)
+        self.d_button.setFont(font)
+        self.d_button.font().setPointSize(25)
+        self.d_button.clicked.connect(self.add)
+
+        self.setWindowIcon(QIcon('financelogo.png'))
+        self.setWindowTitle('Financial Tracking Application')
+        self.setGeometry(10, 10, 1280, 720)
+        self.move(325, 150)
+        self.show()
+
+    def add(self):
+        m.add()
+
+    def delete(self):
+        m.delete()
 
 
-def deleteRecord():
+process = 'financial.app.allowing.taskbar.customization'
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(process)
+# icon https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105
+# isolates the python script from the IDE, "own function" so we can give separate logo that is not python exe
 
-
-appId = 'financial.app.allowing.taskbar.customization'
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appId)
-#  adding taskbar icon from https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105
-#  isolates the python script from the IDE, "own function" so we can give separate logo that is not python exe
 app = QApplication([])
-app.setWindowIcon(QIcon('financiallogo.png'))
-window = QMainWindow()
-
-window.setWindowTitle('Finance Tracker Application')
-window.addButton = QPushButton('Add Record')
-window.deleteButton = QPushButton('Delete Record')
-window.addButton.clicked(addRecord())
-window.deleteButton.clicked(deleteRecord())
-window.show()
-
+scene = Finance()
 app.exec()

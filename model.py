@@ -7,3 +7,11 @@ import record as rd
 # create $ per hour
 # way to show best days to work
 # spend vs profit
+
+
+def add():
+    pass
+
+
+def delete():
+    pass
