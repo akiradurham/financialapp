@@ -1,6 +1,3 @@
-import datetime as dt
-
-
 class Records:
 
     def __init__(self, name, category, price, date):

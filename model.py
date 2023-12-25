@@ -27,21 +27,27 @@ def database_handling(adding, record):
                 if adding:
                     cursor.execute(
                         'INSERT INTO records (name, category, price, time) VALUES (?, ?, ?, ?)',
-                        (record.name, record.category, record.price, record.time)
+                        (record.name.strip(), record.category.strip(), record.price.strip(), record.time.strip())
                     )
                 else:
                     cursor.execute(
                         'DELETE FROM records WHERE name = ? AND time = ?',
-                        (record.name, record.time,)
+                        (record.name.strip(), record.time.strip(),)
                     )
-    except sqlite3.Error as e:
+    except Exception as e:
         raise NameError()
 
 
 def add(record):
-    if (record.name or record.category or record.price or record.time) == '':
+    if (record.name.strip() or record.category.strip() or record.price.strip() or record.time.strip()) == '':
         return False
-    return price_validity(record.price) and database_handling(True, record)
+    if not price_validity(record.price.strip()):
+        return False
+    try:
+        database_handling(True, record)
+        return True
+    except NameError as e:
+        return False
 
 
 def delete(record):

@@ -83,7 +83,7 @@ class Finance(QWidget):
                 self.label.setText('Unsuccessful')
         else:
             self.label.setStyleSheet('color: red;')
-            self.label.setText('Unsuccessful')
+            self.label.setText('Empty Category')
 
     def delete(self):
         if self.category1.isChecked():
@@ -104,7 +104,7 @@ class Finance(QWidget):
                 self.label.setText('Unsuccessful')
         else:
             self.label.setStyleSheet('color: red;')
-            self.label.setText('Unsuccessful')
+            self.label.setText('Empty Category')
 
 
 process = 'financial.app.allowing.taskbar.customization'
