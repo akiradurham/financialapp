@@ -34,6 +34,7 @@ def database_handling(adding, record):
                         'DELETE FROM records WHERE name = ? AND date = ?',
                         (record.name.strip(), record.date.strip(),)
                     )
+                connection.commit()
     except Exception as e:
         raise NameError()
 
@@ -64,7 +65,6 @@ def price_validity(p):
 
 
 def load_items():
-    data = []
     try:
         with closing(sqlite3.connect('finance.db')) as connection:
             with closing(connection.cursor()) as cursor:

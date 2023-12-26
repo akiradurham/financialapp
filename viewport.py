@@ -73,6 +73,9 @@ class Finance(QWidget):
 
     def load_table(self):
         data = m.load_items()
+        print(data)
+        if not data:
+            return
         self.model.setRowCount(len(data))
         self.model.setColumnCount(len(data[0]))
         for row_idx, row_data in enumerate(data):
@@ -89,6 +92,7 @@ class Finance(QWidget):
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
+            self.load_table()
         elif self.category2.isChecked():
             record = rd.Records(self.namebox.text(), 'Expense', self.pricebox.text(), self.datebox.text())
             if m.add(record):
@@ -97,6 +101,7 @@ class Finance(QWidget):
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
+            self.load_table()
         else:
             self.label.setStyleSheet('color: red;')
             self.label.setText('Empty Category')
@@ -110,6 +115,7 @@ class Finance(QWidget):
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
+            self.load_table()
         elif self.category2.isChecked():
             record = rd.Records(self.namebox.text(), 'Expense', self.pricebox.text(), self.datebox.text())
             if m.delete(record):
@@ -118,6 +124,7 @@ class Finance(QWidget):
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
+            self.load_table()
         else:
             self.label.setStyleSheet('color: red;')
             self.label.setText('Empty Category')
