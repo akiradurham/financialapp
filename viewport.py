@@ -62,7 +62,7 @@ class Finance(QWidget):
 
         self.table = QTableView(self)
         self.model = QStandardItemModel()
-        self.table.setMinimumSize(600, 400)
+        self.table.setGeometry(25, 25, 521, 350)
 
         self.load_table()
 

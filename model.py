@@ -78,7 +78,7 @@ def load_items():
                     )
                 ''')
                 cursor.execute(
-                    'SELECT * FROM records'
+                    'SELECT name, category, price, date FROM records'
                 )
                 return cursor.fetchall()
     except Exception as e:
