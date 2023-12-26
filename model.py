@@ -31,8 +31,8 @@ def database_handling(adding, record):
                     )
                 else:
                     cursor.execute(
-                        'DELETE FROM records WHERE name = ? AND date = ?',
-                        (record.name.strip(), record.date.strip(),)
+                        'DELETE FROM records WHERE name = ? AND category = ? AND price = ? AND date = ?',
+                        (record.name.strip(), record.category.strip(), record.price.strip(), record.date.strip())
                     )
                 connection.commit()
     except Exception as e:

@@ -62,7 +62,7 @@ class Finance(QWidget):
 
         self.table = QTableView(self)
         self.model = QStandardItemModel()
-        self.table.setModel(self.model)
+        self.table.setMinimumSize(600, 400)
 
         self.load_table()
 
@@ -78,10 +78,11 @@ class Finance(QWidget):
             return
         self.model.setRowCount(len(data))
         self.model.setColumnCount(len(data[0]))
-        for row_idx, row_data in enumerate(data):
-            for col_idx, cell_data in enumerate(row_data):
-                item = QStandardItem(str(cell_data))
-                self.model.setItem(row_idx, col_idx, item)
+        for row, val in enumerate(data):
+            for col, value in enumerate(val):
+                item = QStandardItem(str(value))
+                self.model.setItem(row, col, item)
+        self.table.setModel(self.model)
 
     def add(self):
         if self.category1.isChecked():
@@ -89,6 +90,7 @@ class Finance(QWidget):
             if m.add(record):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
+                self.load_table()
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
@@ -98,10 +100,10 @@ class Finance(QWidget):
             if m.add(record):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
+                self.load_table()
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
-            self.load_table()
         else:
             self.label.setStyleSheet('color: red;')
             self.label.setText('Empty Category')
@@ -112,19 +114,19 @@ class Finance(QWidget):
             if m.delete(record):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
+                self.load_table()
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
-            self.load_table()
         elif self.category2.isChecked():
             record = rd.Records(self.namebox.text(), 'Expense', self.pricebox.text(), self.datebox.text())
             if m.delete(record):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
+                self.load_table()
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Unsuccessful')
-            self.load_table()
         else:
             self.label.setStyleSheet('color: red;')
             self.label.setText('Empty Category')
