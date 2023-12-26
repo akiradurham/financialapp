@@ -73,7 +73,6 @@ class Finance(QWidget):
 
     def load_table(self):
         data = m.load_items()
-        print(data)
         if not data:
             return
         self.model.setRowCount(len(data))
