@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtSql import *
 import model as m
 import record as rd
 import ctypes
@@ -59,10 +60,25 @@ class Finance(QWidget):
 
         self.setLayout(self.rightbox)
 
+        self.table = QTableView(self)
+        self.model = QStandardItemModel()
+        self.table.setModel(self.model)
+
+        self.load_table()
+
         self.setWindowIcon(QIcon('financelogo.png'))
         self.setWindowTitle('Financial Tracking Application')
         self.setFixedSize(1280, 720)
         self.move(325, 150)
+
+    def load_table(self):
+        data = m.load_items()
+        self.model.setRowCount(len(data))
+        self.model.setColumnCount(len(data[0]))
+        for row_idx, row_data in enumerate(data):
+            for col_idx, cell_data in enumerate(row_data):
+                item = QStandardItem(str(cell_data))
+                self.model.setItem(row_idx, col_idx, item)
 
     def add(self):
         if self.category1.isChecked():

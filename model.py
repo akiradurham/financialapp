@@ -21,18 +21,18 @@ def database_handling(adding, record):
                         name TEXT NOT NULL,
                         category TEXT NOT NULL,
                         price NUMERIC NOT NULL,
-                        time TEXT NOT NULL
+                        date TEXT NOT NULL
                     )
                 ''')
                 if adding:
                     cursor.execute(
-                        'INSERT INTO records (name, category, price, time) VALUES (?, ?, ?, ?)',
-                        (record.name.strip(), record.category.strip(), record.price.strip(), record.time.strip())
+                        'INSERT INTO records (name, category, price, date) VALUES (?, ?, ?, ?)',
+                        (record.name.strip(), record.category.strip(), record.price.strip(), record.date.strip())
                     )
                 else:
                     cursor.execute(
-                        'DELETE FROM records WHERE name = ? AND time = ?',
-                        (record.name.strip(), record.time.strip(),)
+                        'DELETE FROM records WHERE name = ? AND date = ?',
+                        (record.name.strip(), record.date.strip(),)
                     )
     except Exception as e:
         raise NameError()
@@ -61,3 +61,25 @@ def delete(record):
 def price_validity(p):
     regex = r'^\d{1,3}(?:,?\d{3})*(?:\.\d{2})?$'
     return re.match(regex, p)
+
+
+def load_items():
+    data = []
+    try:
+        with closing(sqlite3.connect('finance.db')) as connection:
+            with closing(connection.cursor()) as cursor:
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS records (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        category TEXT NOT NULL,
+                        price NUMERIC NOT NULL,
+                        date TEXT NOT NULL
+                    )
+                ''')
+                cursor.execute(
+                    'SELECT * FROM records'
+                )
+                return cursor.fetchall()
+    except Exception as e:
+        raise NameError()
