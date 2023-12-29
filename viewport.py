@@ -74,8 +74,7 @@ class Finance(QWidget):
         label_date = QLabel("Date:")
 
         form.addRow(label_item, self.namebox)
-        form.addRow(label_category, self.category1)
-        form.addRow("", self.category2)
+        form.addRow(label_category, self.hbox)
         form.addRow(label_price, self.pricebox)
         form.addRow(label_date, self.datebox)
         form.addRow("", self.label)
