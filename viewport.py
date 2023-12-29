@@ -83,69 +83,44 @@ class Finance(QWidget):
                 self.model.setItem(row, col, item)
         self.table.setModel(self.model)
 
-    def add(self):
+    def which(self):
         if self.category1.isChecked():
-            record = rd.Records(self.namebox.text(), 'Revenue', self.pricebox.text(), self.datebox.text())
-            if m.add(record):
-                self.label.setStyleSheet('color: green;')
-                self.label.setText('Successful')
-                self.load_table()
-            else:
-                self.label.setStyleSheet('color: red;')
-                self.label.setText('Unsuccessful')
-            self.load_table()
-        elif self.category2.isChecked():
-            record = rd.Records(self.namebox.text(), 'Expense', self.pricebox.text(), self.datebox.text())
-            if m.add(record):
-                self.label.setStyleSheet('color: green;')
-                self.label.setText('Successful')
-                self.load_table()
-            else:
-                self.label.setStyleSheet('color: red;')
-                self.label.setText('Unsuccessful')
+            return 'Revenue'
         else:
-            self.label.setStyleSheet('color: red;')
-            self.label.setText('Empty Category')
+            return 'Expense'
+
+    def add(self):
+        if self.input_check():
+            record = rd.Records(self.namebox.text(), self.which(), self.pricebox.text(), self.datebox.text())
+            if m.add(record):
+                self.label.setStyleSheet('color: green;')
+                self.label.setText('Successful')
+                self.load_table()
 
     def delete(self):
-        if self.category1.isChecked():
-            record = rd.Records(self.namebox.text(), 'Revenue', self.pricebox.text(), self.datebox.text())
+        if self.input_check():
+            record = rd.Records(self.namebox.text(), self.which(), self.pricebox.text(), self.datebox.text())
             if m.delete(record):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
                 self.load_table()
-            else:
-                self.label.setStyleSheet('color: red;')
-                self.label.setText('Unsuccessful')
-        elif self.category2.isChecked():
-            record = rd.Records(self.namebox.text(), 'Expense', self.pricebox.text(), self.datebox.text())
-            if m.delete(record):
-                self.label.setStyleSheet('color: green;')
-                self.label.setText('Successful')
-                self.load_table()
-            else:
-                self.label.setStyleSheet('color: red;')
-                self.label.setText('Unsuccessful')
-        else:
-            self.label.setStyleSheet('color: red;')
-            self.label.setText('Empty Category')
 
-        def input_check():
-            self.label.setStyleSheet('color: red;')
-            if self.namebox.text() == '':
-                self.label.setText('Enter A Name')
-                return False
-            elif not self.category1.isChecked() and not self.category2.isChecked():
-                self.label.setText('Empty Category')
-                return False
-            elif self.pricebox.text() == '':
-                self.label.setText('Enter A Price')
-                return False
-            elif self.datebox.text() == '':
-                self.label.setText('Enter A Date')
-                return False
-            else:
-                return True
+    def input_check(self):
+        self.label.setStyleSheet('color: red;')
+        if self.namebox.text() == '':
+            self.label.setText('Enter A Name')
+            return False
+        elif not self.category1.isChecked() and not self.category2.isChecked():
+            self.label.setText('Empty Category')
+            return False
+        elif self.pricebox.text() == '':
+            self.label.setText('Enter A Price')
+            return False
+        elif self.datebox.text() == '':
+            self.label.setText('Enter A Date')
+            return False
+        else:
+            return True
 
 
 process = 'financial.app.allowing.taskbar.customization'
