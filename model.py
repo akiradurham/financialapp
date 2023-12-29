@@ -52,11 +52,27 @@ def add(record):
 
 
 def delete(record):
-    try:
-        database_handling(False, record)
-        return True
-    except NameError as e:
+    if inside(record):
+        try:
+            database_handling(False, record)
+            return True
+        except NameError as e:
+            return False
+    else:
         return False
+
+
+def inside(record):
+    try:
+        with closing(sqlite3.connect('finance.db')) as connection:
+            with closing(connection.cursor()) as cursor:
+                cursor.execute(
+                    'SELECT * FROM records WHERE name = ? AND category = ? AND price = ? AND date = ?',
+                    (record.name.strip(), record.category.strip(), record.price.strip(), record.date.strip())
+                )
+                return cursor.fetchall()
+    except Exception as e:
+        raise NameError()
 
 
 def price_validity(p):

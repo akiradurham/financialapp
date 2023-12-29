@@ -130,6 +130,23 @@ class Finance(QWidget):
             self.label.setStyleSheet('color: red;')
             self.label.setText('Empty Category')
 
+        def input_check():
+            self.label.setStyleSheet('color: red;')
+            if self.namebox.text() == '':
+                self.label.setText('Enter A Name')
+                return False
+            elif not self.category1.isChecked() and not self.category2.isChecked():
+                self.label.setText('Empty Category')
+                return False
+            elif self.pricebox.text() == '':
+                self.label.setText('Enter A Price')
+                return False
+            elif self.datebox.text() == '':
+                self.label.setText('Enter A Date')
+                return False
+            else:
+                return True
+
 
 process = 'financial.app.allowing.taskbar.customization'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(process)
