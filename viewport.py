@@ -17,7 +17,7 @@ class Finance(QWidget):
         font.setPointSize(11)
         self.label.setFont(font)
 
-        self.namebox = QLineEdit('Enter item name', self)
+        self.namebox = QLineEdit('', self)
         self.namebox.setFont(font)
 
         self.hbox = QHBoxLayout()
@@ -26,10 +26,10 @@ class Finance(QWidget):
         self.hbox.addWidget(self.category1)
         self.hbox.addWidget(self.category2)
 
-        self.pricebox = QLineEdit('Enter price value', self)
+        self.pricebox = QLineEdit('', self)
         self.pricebox.setFont(font)
 
-        self.datebox = QLineEdit('Full Month, Day, Year', self)
+        self.datebox = QLineEdit('', self)
         self.datebox.setFont(font)
 
         self.a_button = QPushButton('Add a Record', self)
@@ -40,25 +40,42 @@ class Finance(QWidget):
         self.d_button.setFont(font)
         self.d_button.clicked.connect(self.delete)
 
-        self.rightbox = QVBoxLayout()
-        self.rightbox.addWidget(self.namebox)
-        self.rightbox.addLayout(self.hbox)
-        self.rightbox.addWidget(self.pricebox)
-        self.rightbox.addWidget(self.datebox)
-        self.rightbox.addWidget(self.label)
-        self.rightbox.addWidget(self.a_button)
-        self.rightbox.addWidget(self.d_button)
-        self.rightbox.setAlignment(Qt.AlignTop)
-        self.rightbox.setSpacing(30)
+        form_layout = QFormLayout()
 
-        self.width = QWidget()
-        self.width.setMaximumWidth(200)
-        self.width.setLayout(self.rightbox)
+        label_item = QLabel("Item Name:")
+        label_item.setFont(font)
 
-        self.mainlayout = QHBoxLayout(self)
-        self.mainlayout.addWidget(self.width, alignment=Qt.AlignRight)
+        label_category = QLabel("Category:")
+        label_category.setFont(font)
 
-        self.setLayout(self.rightbox)
+        label_price = QLabel("Price:")
+        label_price.setFont(font)
+
+        label_date = QLabel("Date:")
+        label_date .setFont(font)
+
+        form_layout.addRow(label_item, self.namebox)
+        form_layout.addRow(label_category, self.category1)
+        form_layout.addRow("", self.category2)
+        form_layout.addRow(label_price, self.pricebox)
+        form_layout.addRow(label_date, self.datebox)
+        form_layout.addRow("", self.label)
+        form_layout.addRow("", self.a_button)
+        form_layout.addRow("", self.d_button)
+
+        right_layout = QVBoxLayout()
+        right_layout.addLayout(form_layout)
+        right_layout.setAlignment(Qt.AlignTop)
+        right_layout.setSpacing(30)
+
+        width = QWidget()
+        width.setMinimumWidth(300)
+        width.setLayout(right_layout)
+
+        main_layout = QHBoxLayout(self)
+        main_layout.addWidget(width, alignment=Qt.AlignRight)
+
+        self.setLayout(main_layout)
 
         self.table = QTableView(self)
         self.model = QStandardItemModel()
