@@ -13,12 +13,12 @@ class Finance(QWidget):
 
         self.label = QLabel('', self)
         self.label.setAlignment(Qt.AlignCenter)
-        font = self.label.font()
-        font.setPointSize(11)
-        self.label.setFont(font)
+        self.font = self.label.font()
+        self.font.setPointSize(11)
+        self.label.setFont(self.font)
 
         self.namebox = QLineEdit('', self)
-        self.namebox.setFont(font)
+        self.namebox.setFont(self.font)
 
         self.hbox = QHBoxLayout()
         self.category1 = QRadioButton('Revenue')
@@ -27,41 +27,21 @@ class Finance(QWidget):
         self.hbox.addWidget(self.category2)
 
         self.pricebox = QLineEdit('', self)
-        self.pricebox.setFont(font)
+        self.pricebox.setFont(self.font)
 
         self.datebox = QLineEdit('', self)
-        self.datebox.setFont(font)
+        self.datebox.setFont(self.font)
 
         self.a_button = QPushButton('Add a Record', self)
-        self.a_button.setFont(font)
+        self.a_button.setFont(self.font)
         self.a_button.clicked.connect(self.add)
 
         self.d_button = QPushButton('Delete a Record', self)
-        self.d_button.setFont(font)
+        self.d_button.setFont(self.font)
         self.d_button.clicked.connect(self.delete)
 
         form_layout = QFormLayout()
-
-        label_item = QLabel("Item Name:")
-        label_item.setFont(font)
-
-        label_category = QLabel("Category:")
-        label_category.setFont(font)
-
-        label_price = QLabel("Price:")
-        label_price.setFont(font)
-
-        label_date = QLabel("Date:")
-        label_date .setFont(font)
-
-        form_layout.addRow(label_item, self.namebox)
-        form_layout.addRow(label_category, self.category1)
-        form_layout.addRow("", self.category2)
-        form_layout.addRow(label_price, self.pricebox)
-        form_layout.addRow(label_date, self.datebox)
-        form_layout.addRow("", self.label)
-        form_layout.addRow("", self.a_button)
-        form_layout.addRow("", self.d_button)
+        self.add_labels(form_layout)
 
         right_layout = QVBoxLayout()
         right_layout.addLayout(form_layout)
@@ -87,6 +67,28 @@ class Finance(QWidget):
         self.setWindowTitle('Financial Tracking Application')
         self.setFixedSize(1280, 720)
         self.move(325, 150)
+
+    def add_labels(self, form_layout):
+        label_item = QLabel("Item Name:")
+        label_item.setFont(self.font)
+
+        label_category = QLabel("Category:")
+        label_category.setFont(self.font)
+
+        label_price = QLabel("Price:")
+        label_price.setFont(self.font)
+
+        label_date = QLabel("Date:")
+        label_date.setFont(self.font)
+
+        form_layout.addRow(label_item, self.namebox)
+        form_layout.addRow(label_category, self.category1)
+        form_layout.addRow("", self.category2)
+        form_layout.addRow(label_price, self.pricebox)
+        form_layout.addRow(label_date, self.datebox)
+        form_layout.addRow("", self.label)
+        form_layout.addRow("", self.a_button)
+        form_layout.addRow("", self.d_button)
 
     def load_table(self):
         data = m.load_items()
