@@ -12,12 +12,8 @@ class Finance(QWidget):
 
         self.label = QLabel('', self)
         self.label.setAlignment(Qt.AlignCenter)
-        self.font = self.label.font()
-        self.font.setPointSize(11)
-        self.label.setFont(self.font)
 
         self.namebox = QLineEdit('', self)
-        self.namebox.setFont(self.font)
 
         self.hbox = QHBoxLayout()
         self.category1 = QRadioButton('Revenue')
@@ -26,17 +22,13 @@ class Finance(QWidget):
         self.hbox.addWidget(self.category2)
 
         self.pricebox = QLineEdit('', self)
-        self.pricebox.setFont(self.font)
 
         self.datebox = QLineEdit('', self)
-        self.datebox.setFont(self.font)
 
         self.a_button = QPushButton('Add a Record', self)
-        self.a_button.setFont(self.font)
         self.a_button.clicked.connect(self.add)
 
         self.d_button = QPushButton('Delete a Record', self)
-        self.d_button.setFont(self.font)
         self.d_button.clicked.connect(self.delete)
 
         self.form_layout = QFormLayout()
@@ -74,16 +66,12 @@ class Finance(QWidget):
 
     def add_labels(self, form):
         label_item = QLabel("Item Name:")
-        label_item.setFont(self.font)
 
         label_category = QLabel("Category:")
-        label_category.setFont(self.font)
 
         label_price = QLabel("Price:")
-        label_price.setFont(self.font)
 
         label_date = QLabel("Date:")
-        label_date.setFont(self.font)
 
         form.addRow(label_item, self.namebox)
         form.addRow(label_category, self.category1)
@@ -119,6 +107,9 @@ class Finance(QWidget):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
                 self.load_table()
+            else:
+                self.label.setStyleSheet('color: red;')
+                self.label.setText('Price Format Incorrect or Repeat')
 
     def delete(self):
         if self.input_check():
@@ -152,6 +143,11 @@ ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(process)
 # isolates the python script from the IDE, "own function" so we can give separate logo that is not python exe
 
 app = QApplication([])
+app.setStyleSheet('''
+    QWidget {
+        font-size: 16px;
+    }
+''')
 scene = Finance()
 scene.show()
 app.exec()

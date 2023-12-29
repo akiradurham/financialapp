@@ -40,15 +40,14 @@ def database_handling(adding, record):
 
 
 def add(record):
-    if (record.name.strip() or record.category.strip() or record.price.strip() or record.time.strip()) == '':
-        return False
     if not price_validity(record.price.strip()):
         return False
-    try:
-        database_handling(True, record)
-        return True
-    except NameError as e:
-        return False
+    if not inside(record):
+        try:
+            database_handling(True, record)
+            return True
+        except NameError as e:
+            return False
 
 
 def delete(record):
