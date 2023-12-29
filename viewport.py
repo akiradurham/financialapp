@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5.QtSql import *
 import model as m
 import record as rd
 import ctypes
@@ -40,11 +39,27 @@ class Finance(QWidget):
         self.d_button.setFont(self.font)
         self.d_button.clicked.connect(self.delete)
 
-        form_layout = QFormLayout()
-        self.add_labels(form_layout)
+        self.form_layout = QFormLayout()
+        self.add_labels(self.form_layout)
 
+        self.layout_setup()
+
+        self.table_setup()
+
+        self.setWindowIcon(QIcon('financelogo.png'))
+        self.setWindowTitle('Financial Tracking Application')
+        self.setFixedSize(1280, 720)
+        self.move(325, 150)
+
+    def table_setup(self):
+        self.table = QTableView(self)
+        self.model = QStandardItemModel()
+        self.table.setGeometry(25, 25, 521, 350)
+        self.load_table()
+
+    def layout_setup(self):
         right_layout = QVBoxLayout()
-        right_layout.addLayout(form_layout)
+        right_layout.addLayout(self.form_layout)
         right_layout.setAlignment(Qt.AlignTop)
         right_layout.setSpacing(30)
 
@@ -57,18 +72,7 @@ class Finance(QWidget):
 
         self.setLayout(main_layout)
 
-        self.table = QTableView(self)
-        self.model = QStandardItemModel()
-        self.table.setGeometry(25, 25, 521, 350)
-
-        self.load_table()
-
-        self.setWindowIcon(QIcon('financelogo.png'))
-        self.setWindowTitle('Financial Tracking Application')
-        self.setFixedSize(1280, 720)
-        self.move(325, 150)
-
-    def add_labels(self, form_layout):
+    def add_labels(self, form):
         label_item = QLabel("Item Name:")
         label_item.setFont(self.font)
 
@@ -81,14 +85,14 @@ class Finance(QWidget):
         label_date = QLabel("Date:")
         label_date.setFont(self.font)
 
-        form_layout.addRow(label_item, self.namebox)
-        form_layout.addRow(label_category, self.category1)
-        form_layout.addRow("", self.category2)
-        form_layout.addRow(label_price, self.pricebox)
-        form_layout.addRow(label_date, self.datebox)
-        form_layout.addRow("", self.label)
-        form_layout.addRow("", self.a_button)
-        form_layout.addRow("", self.d_button)
+        form.addRow(label_item, self.namebox)
+        form.addRow(label_category, self.category1)
+        form.addRow("", self.category2)
+        form.addRow(label_price, self.pricebox)
+        form.addRow(label_date, self.datebox)
+        form.addRow("", self.label)
+        form.addRow("", self.a_button)
+        form.addRow("", self.d_button)
 
     def load_table(self):
         data = m.load_items()
