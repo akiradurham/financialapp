@@ -38,6 +38,7 @@ class Finance(QWidget):
         self.add_labels(self.form_layout)
 
         self.plot = graph.PlotWidget(self)
+        self.plot.setGeometry(25, 350, 521, 350)
         self.graph_setup()
 
         self.layout_setup()
@@ -52,8 +53,12 @@ class Finance(QWidget):
     def table_setup(self):
         self.table = QTableView(self)
         self.model = QStandardItemModel()
-        self.table.setGeometry(25, 25, 521, 350)
+        self.table.setGeometry(25, 25, 521, 300)
+        headers = ['Name', 'Category', 'Price', 'Date']
+        for col, header in enumerate(headers):
+            self.model.setHeaderData(col, Qt.Horizontal, header)
         self.load_table()
+        self.table.setModel(self.model)
 
     def layout_setup(self):
         right_layout = QVBoxLayout()
@@ -89,15 +94,18 @@ class Finance(QWidget):
 
     def load_table(self):
         data = m.load_items()
-        if not data:
-            return
-        self.model.setRowCount(len(data))
-        self.model.setColumnCount(len(data[0]))
-        for row, val in enumerate(data):
-            for col, value in enumerate(val):
-                item = QStandardItem(str(value))
-                self.model.setItem(row, col, item)
-        self.table.setModel(self.model)
+        if data:
+            data = sorted(data, key=lambda row: row[3], reverse=True)
+            self.model.setRowCount(len(data))
+            # self.model.setColumnCount(len(data[0]))
+            for row, val in enumerate(data):
+                for col, value in enumerate(val):
+                    if col == 2 and val[1] == 'Expense':
+                        value = '-$' + '{:.2f}'.format(value)
+                    elif col == 2:
+                        value = '$' + '{:.2f}'.format(value)
+                    item = QStandardItem(str(value))
+                    self.model.setItem(row, col, item)
 
     def which(self):
         if self.category1.isChecked():
@@ -112,6 +120,7 @@ class Finance(QWidget):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
                 self.load_table()
+                self.graph_setup()
             else:
                 self.label.setStyleSheet('color: red;')
                 self.label.setText('Price Format Incorrect or Repeat')
@@ -123,6 +132,7 @@ class Finance(QWidget):
                 self.label.setStyleSheet('color: green;')
                 self.label.setText('Successful')
                 self.load_table()
+                self.graph_setup()
 
     def input_check(self):
         self.label.setStyleSheet('color: red;')
@@ -142,15 +152,22 @@ class Finance(QWidget):
             return True
 
     def graph_setup(self):
+        self.plot.clear()
         data = m.load_items()
         if data:
-            name, category, price, date = [], [], [], []
-            for row in data:
-                name.append(row[0])
-                category.append(row[1])
-                price.append(float(row[2]))
-                date.append(datetime.strptime(row[3], '%m/%d/%Y').toordinal())
-            self.plot.plot(price, date)
+            sorted_data = sorted(data, key=lambda row: float(row[3].replace('/', '')))
+            name = [row[0] for row in sorted_data]
+            category = [row[1] for row in sorted_data]
+            price = [-float(row[2]) if row[1] == 'Expense' else float(row[2]) for row in sorted_data]
+            date = [float(row[3].replace('/', '')) for row in sorted_data]
+            scatter_plot = graph.ScatterPlotItem()
+            scatter_plot.setData(date, price)
+            line = graph.PlotCurveItem()
+            line.setData(date, price, pen='r')
+            horizontal = graph.InfiniteLine(pos=0, angle=0, pen='b')
+            self.plot.addItem(scatter_plot)
+            self.plot.addItem(line)
+            self.plot.addItem(horizontal)
 
 
 process = 'financial.app.allowing.taskbar.customization'
