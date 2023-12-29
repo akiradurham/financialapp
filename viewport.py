@@ -1,6 +1,9 @@
+from datetime import datetime
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5 import QtWidgets
+import pyqtgraph as graph
 import model as m
 import record as rd
 import ctypes
@@ -33,6 +36,9 @@ class Finance(QWidget):
 
         self.form_layout = QFormLayout()
         self.add_labels(self.form_layout)
+
+        self.plot = graph.PlotWidget(self)
+        self.graph_setup()
 
         self.layout_setup()
 
@@ -134,6 +140,17 @@ class Finance(QWidget):
             return False
         else:
             return True
+
+    def graph_setup(self):
+        data = m.load_items()
+        if data:
+            name, category, price, date = [], [], [], []
+            for row in data:
+                name.append(row[0])
+                category.append(row[1])
+                price.append(float(row[2]))
+                date.append(datetime.strptime(row[3], '%m/%d/%Y').toordinal())
+            self.plot.plot(price, date)
 
 
 process = 'financial.app.allowing.taskbar.customization'
