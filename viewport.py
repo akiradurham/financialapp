@@ -32,7 +32,17 @@ class Finance(QWidget):
         self.d_button = QPushButton('Delete a Record', self)
         self.d_button.clicked.connect(self.delete)
 
+        self.spacer_label = QLabel('', self)
+        self.spacer_label.setFixedHeight(100)
 
+        self.graph1 = QRadioButton('Daily Changes')
+        self.a_button.clicked.connect(self.daily_graph)
+
+        self.graph2 = QRadioButton('Total Changes')
+        self.a_button.clicked.connect(self.total_graph)
+
+        self.graph3 = QRadioButton('Serving')
+        self.a_button.clicked.connect(self.serving)
 
         self.form_layout = QFormLayout()
         self.add_labels(self.form_layout)
@@ -79,28 +89,28 @@ class Finance(QWidget):
         self.setLayout(main_layout)
 
     def add_labels(self, form):
-        label_item = QLabel("Item Name:")
-
-        label_category = QLabel("Category:")
-
-        label_price = QLabel("Price:")
-
-        label_date = QLabel("Date:")
+        label_item = QLabel('Item Name:')
+        label_category = QLabel('Category:')
+        label_price = QLabel('Price:')
+        label_date = QLabel('Date:')
 
         form.addRow(label_item, self.namebox)
         form.addRow(label_category, self.hbox)
         form.addRow(label_price, self.pricebox)
         form.addRow(label_date, self.datebox)
-        form.addRow("", self.label)
-        form.addRow("", self.a_button)
-        form.addRow("", self.d_button)
+        form.addRow('', self.label)
+        form.addRow('', self.a_button)
+        form.addRow('', self.d_button)
+        form.addRow('', self.spacer_label)
+        form.addRow('', self.graph1)
+        form.addRow('', self.graph2)
+        form.addRow('', self.graph3)
+
 
     def load_table(self):
         data = m.load_items()
         if data:
             data = sorted(data, key=lambda row: row[3], reverse=True)
-            self.model.setRowCount(len(data))
-            # self.model.setColumnCount(len(data[0]))
             for row, val in enumerate(data):
                 for col, value in enumerate(val):
                     if col == 2 and val[1] == 'Expense':
@@ -181,6 +191,15 @@ class Finance(QWidget):
             self.plot.addItem(plot)
             self.plot.addItem(line)
             self.plot.addItem(horizontal)
+
+    def daily_graph(self):
+        pass
+
+    def total_graph(self):
+        pass
+
+    def serving(self):
+        pass
 
 
 process = 'financial.app.allowing.taskbar.customization'

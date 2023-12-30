@@ -6,6 +6,8 @@ from contextlib import closing
 # create $ per hour
 # way to show best days to work
 
+# add monthly, yearly, alltime views to graphs
+
 
 def database_handling(adding, record):
     try:
