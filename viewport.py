@@ -4,6 +4,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5 import QtWidgets
 import pyqtgraph as graph
+import numpy as np
+import matplotlib.dates as mplot
 import model as m
 import record as rd
 import ctypes
@@ -159,19 +161,24 @@ class Finance(QWidget):
         data = m.load_items()
         if data:
             sorted_data = sorted(data, key=lambda row: float(row[3].replace('/', '')))
+
             name = [row[0] for row in sorted_data]
             category = [row[1] for row in sorted_data]
             price = [-float(row[2]) if row[1] == 'Expense' else float(row[2]) for row in sorted_data]
             date = [float(row[3].replace('/', '')) for row in sorted_data]
+
             scatter_plot = graph.ScatterPlotItem()
-            scatter_plot.setData(date, price)
+            scatter_plot.setData(x=date, y=price)
             line = graph.PlotCurveItem()
-            line.setData(date, price, pen='r')
+            line.setData(x=date, y=price, pen='r')
             horizontal = graph.InfiniteLine(pos=0, angle=0, pen='b')
+
             self.plot.addItem(scatter_plot)
             self.plot.addItem(line)
             self.plot.addItem(horizontal)
-
+            self.plot.setLabel('bottom', 'Date')
+            self.plot.setLabel('left', 'Money')
+            self.plot.setTitle('Daily Revenues and Expenses')
 
 process = 'financial.app.allowing.taskbar.customization'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(process)
