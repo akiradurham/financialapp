@@ -1,11 +1,7 @@
-from datetime import datetime
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5 import QtWidgets
 import pyqtgraph as graph
-import numpy as np
-import matplotlib.dates as mplot
 import model as m
 import record as rd
 import ctypes
@@ -35,6 +31,8 @@ class Finance(QWidget):
 
         self.d_button = QPushButton('Delete a Record', self)
         self.d_button.clicked.connect(self.delete)
+
+
 
         self.form_layout = QFormLayout()
         self.add_labels(self.form_layout)
@@ -138,6 +136,9 @@ class Finance(QWidget):
                 self.label.setText('Successful')
                 self.load_table()
                 self.graph_setup()
+            else:
+                self.label.setStyleSheet('color: red;')
+                self.label.setText('Not A Valid Record')
 
     def input_check(self):
         self.label.setStyleSheet('color: red;')
@@ -167,18 +168,20 @@ class Finance(QWidget):
             price = [-float(row[2]) if row[1] == 'Expense' else float(row[2]) for row in sorted_data]
             date = [float(row[3].replace('/', '')) for row in sorted_data]
 
-            scatter_plot = graph.ScatterPlotItem()
-            scatter_plot.setData(x=date, y=price)
-            line = graph.PlotCurveItem()
-            line.setData(x=date, y=price, pen='r')
-            horizontal = graph.InfiniteLine(pos=0, angle=0, pen='b')
+            if True:
+                plot = graph.ScatterPlotItem()
+                plot.setData(x=date, y=price)
+                line = graph.PlotCurveItem()
+                line.setData(x=date, y=price, pen='r')
+                horizontal = graph.InfiniteLine(pos=0, angle=0, pen='b')
+                self.plot.setLabel('bottom', 'Date')
+                self.plot.setLabel('left', 'Money')
+                self.plot.setTitle('Daily Revenues and Expenses')
 
-            self.plot.addItem(scatter_plot)
+            self.plot.addItem(plot)
             self.plot.addItem(line)
             self.plot.addItem(horizontal)
-            self.plot.setLabel('bottom', 'Date')
-            self.plot.setLabel('left', 'Money')
-            self.plot.setTitle('Daily Revenues and Expenses')
+
 
 process = 'financial.app.allowing.taskbar.customization'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(process)

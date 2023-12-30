@@ -2,13 +2,9 @@ import sqlite3
 import re
 from contextlib import closing
 
-# way to input diff categories
-
-# way to visualize
 # way to track server job
 # create $ per hour
 # way to show best days to work
-# spend vs profit
 
 
 def database_handling(adding, record):
