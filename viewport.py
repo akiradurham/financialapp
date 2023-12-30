@@ -55,8 +55,11 @@ class Finance(QWidget):
         self.model = QStandardItemModel()
         self.table.setGeometry(25, 25, 521, 300)
         headers = ['Name', 'Category', 'Price', 'Date']
-        for col, header in enumerate(headers):
-            self.model.setHeaderData(col, Qt.Horizontal, header)
+
+        self.horizontal_header = self.table.horizontalHeader()
+        self.horizontal_header.setSectionResizeMode(QHeaderView.Stretch)
+        self.model.setHorizontalHeaderLabels(headers)
+
         self.load_table()
         self.table.setModel(self.model)
 
