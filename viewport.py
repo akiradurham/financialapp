@@ -35,21 +35,21 @@ class Finance(QWidget):
         self.spacer_label = QLabel('', self)
         self.spacer_label.setFixedHeight(100)
 
-        self.graph1 = QRadioButton('Daily Changes')
-        self.a_button.clicked.connect(self.daily_graph)
+        self.graph1 = QPushButton('Daily Changes', self)
+        self.graph1.clicked.connect(self.daily_graph)
 
-        self.graph2 = QRadioButton('Total Changes')
-        self.a_button.clicked.connect(self.total_graph)
+        self.graph2 = QPushButton('Total Changes', self)
+        self.graph2.clicked.connect(self.total_graph)
 
-        self.graph3 = QRadioButton('Serving')
-        self.a_button.clicked.connect(self.serving)
+        self.graph3 = QPushButton('Serving', self)
+        self.graph3.clicked.connect(self.serving)
 
         self.form_layout = QFormLayout()
         self.add_labels(self.form_layout)
 
         self.plot = graph.PlotWidget(self)
         self.plot.setGeometry(25, 350, 521, 350)
-        self.graph_setup()
+        self.daily_graph()
 
         self.layout_setup()
 
@@ -105,7 +105,6 @@ class Finance(QWidget):
         form.addRow('', self.graph1)
         form.addRow('', self.graph2)
         form.addRow('', self.graph3)
-
 
     def load_table(self):
         data = m.load_items()
@@ -167,36 +166,57 @@ class Finance(QWidget):
         else:
             return True
 
-    def graph_setup(self):
+    def daily_graph(self):
         self.plot.clear()
         data = m.load_items()
         if data:
             sorted_data = sorted(data, key=lambda row: float(row[3].replace('/', '')))
 
-            name = [row[0] for row in sorted_data]
-            category = [row[1] for row in sorted_data]
+            # name = [row[0] for row in sorted_data]
+            # category = [row[1] for row in sorted_data]
             price = [-float(row[2]) if row[1] == 'Expense' else float(row[2]) for row in sorted_data]
             date = [float(row[3].replace('/', '')) for row in sorted_data]
 
-            if True:
-                plot = graph.ScatterPlotItem()
-                plot.setData(x=date, y=price)
-                line = graph.PlotCurveItem()
-                line.setData(x=date, y=price, pen='r')
-                horizontal = graph.InfiniteLine(pos=0, angle=0, pen='b')
-                self.plot.setLabel('bottom', 'Date')
-                self.plot.setLabel('left', 'Money')
-                self.plot.setTitle('Daily Revenues and Expenses')
-
+            plot = graph.ScatterPlotItem()
+            plot.setData(x=date, y=price)
+            line = graph.PlotCurveItem()
+            line.setData(x=date, y=price, pen='r')
+            horizontal = graph.InfiniteLine(pos=0, angle=0, pen='w')
+            self.plot.setLabel('bottom', 'Date')
+            self.plot.setLabel('left', 'Money')
+            self.plot.setTitle('Daily Revenues and Expenses')
             self.plot.addItem(plot)
             self.plot.addItem(line)
             self.plot.addItem(horizontal)
 
-    def daily_graph(self):
-        pass
-
     def total_graph(self):
-        pass
+        self.plot.clear()
+        data = m.load_items()
+        if data:
+            sorted_data = sorted(data, key=lambda row: float(row[3].replace('/', '')))
+
+            # name = [row[0] for row in sorted_data]
+            # category = [row[1] for row in sorted_data]
+            price = [-float(row[2]) if row[1] == 'Expense' else float(row[2]) for row in sorted_data]
+            date = [float(row[3].replace('/', '')) for row in sorted_data]
+            total = []
+            cumulative_total = 0
+
+            for i in range(len(price)):
+                cumulative_total += price[i]
+                total.append(cumulative_total)
+
+            plot = graph.ScatterPlotItem()
+            plot.setData(x=date, y=total)
+            line = graph.PlotCurveItem()
+            line.setData(x=date, y=total, pen='r')
+            horizontal = graph.InfiniteLine(pos=0, angle=0, pen='w')
+            self.plot.setLabel('bottom', 'Date')
+            self.plot.setLabel('left', 'Money')
+            self.plot.setTitle('Total Change to Money')
+            self.plot.addItem(plot)
+            self.plot.addItem(line)
+            self.plot.addItem(horizontal)
 
     def serving(self):
         pass
