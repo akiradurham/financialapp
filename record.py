@@ -6,5 +6,11 @@ class Records:
         self.price = price
         self.date = date
 
-    def __repr__(self):
-        return f'{self.name} is a {self.category}: ${self.price} on {self.date}\n'
+
+class Serving:
+
+    def __init__(self, company, hours, profit, date):
+        self.company = company
+        self.hours = hours
+        self.profit = profit
+        self.date = date

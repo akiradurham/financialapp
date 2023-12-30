@@ -2,35 +2,29 @@ import sqlite3
 import re
 from contextlib import closing
 
-# way to track server job
-# create $ per hour
-# way to show best days to work
-
-# add monthly, yearly, alltime views to graphs
-
 
 def database_handling(adding, record):
     try:
         with closing(sqlite3.connect('finance.db')) as connection:
             with closing(connection.cursor()) as cursor:
                 cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS records (
+                    CREATE TABLE IF NOT EXISTS serving (
                         id INTEGER PRIMARY KEY,
-                        name TEXT NOT NULL,
-                        category TEXT NOT NULL,
-                        price NUMERIC NOT NULL,
+                        company TEXT NOT NULL,
+                        hours TEXT NOT NULL,
+                        profit NUMERIC NOT NULL,
                         date TEXT NOT NULL
                     )
                 ''')
                 if adding:
                     cursor.execute(
-                        'INSERT INTO records (name, category, price, date) VALUES (?, ?, ?, ?)',
-                        (record.name.strip(), record.category.strip(), record.price.strip(), record.date.strip())
+                        'INSERT INTO serving (company, hours, profit, date) VALUES (?, ?, ?, ?)',
+                        (record.company.strip(), record.hours.strip(), record.profit.strip(), record.date.strip())
                     )
                 else:
                     cursor.execute(
-                        'DELETE FROM records WHERE name = ? AND category = ? AND price = ? AND date = ?',
-                        (record.name.strip(), record.category.strip(), record.price.strip(), record.date.strip())
+                        'DELETE FROM serving WHERE company = ? AND hours = ? AND profit = ? AND date = ?',
+                        (record.company.strip(), record.hours.strip(), record.profit.strip(), record.date.strip())
                     )
                 connection.commit()
     except Exception as e:
@@ -38,16 +32,15 @@ def database_handling(adding, record):
 
 
 def add(record):
-    if not price_validity(record.price.strip()):
+    if not price_validity(record.profit.strip()):
         return False
-    elif not inside(record):
+    if not inside(record):
         try:
             database_handling(True, record)
             return True
         except NameError as e:
             return False
-    else:
-        return False
+    return False
 
 
 def delete(record):
@@ -66,8 +59,8 @@ def inside(record):
         with closing(sqlite3.connect('finance.db')) as connection:
             with closing(connection.cursor()) as cursor:
                 cursor.execute(
-                    'SELECT * FROM records WHERE name = ? AND category = ? AND price = ? AND date = ?',
-                    (record.name.strip(), record.category.strip(), record.price.strip(), record.date.strip())
+                    'SELECT * FROM serving WHERE company = ? AND hours = ? AND profit = ? AND date = ?',
+                    (record.company.strip(), record.hours.strip(), record.profit.strip(), record.date.strip())
                 )
                 return cursor.fetchall()
     except Exception as e:
@@ -84,16 +77,16 @@ def load_items():
         with closing(sqlite3.connect('finance.db')) as connection:
             with closing(connection.cursor()) as cursor:
                 cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS records (
+                    CREATE TABLE IF NOT EXISTS serving (
                         id INTEGER PRIMARY KEY,
-                        name TEXT NOT NULL,
-                        category TEXT NOT NULL,
-                        price NUMERIC NOT NULL,
+                        company TEXT NOT NULL,
+                        hours TEXT NOT NULL,
+                        profit NUMERIC NOT NULL,
                         date TEXT NOT NULL
                     )
                 ''')
                 cursor.execute(
-                    'SELECT name, category, price, date FROM records'
+                    'SELECT company, hours, profit, date FROM serving'
                 )
                 return cursor.fetchall()
     except Exception as e:
